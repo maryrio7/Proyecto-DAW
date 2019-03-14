@@ -1,5 +1,6 @@
 # Proyecto-DAW
 Practica Servlets&amp;JSP
+Autor: Mario Fernández González
 
 Nombre de la BD usada: email_validation
 Puerto MySQL: 3308
