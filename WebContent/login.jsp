@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h1>Mario - Login Page</h1>
-	<form action="" method="POST">
+	<form action="LoginServlet" method="POST">
 		<label for="email">Email: </label>
 		<input name="email" id="n1" type="text">
 		<br><br>
