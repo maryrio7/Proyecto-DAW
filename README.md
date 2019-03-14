@@ -13,3 +13,8 @@ Archivos JAR necesarios:
 - mysql-connector-java-5.1.9.jar
 
 Proyecto desarrollado en el entorno de trabajo de Eclipse
+
+Sitios de ayuda: 
+  - StudyViral
+  - stackoverflow.com
+  - github.com
