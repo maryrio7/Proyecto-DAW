@@ -1,27 +1,28 @@
 package paquete1.in;
 
 import java.io.IOException;
-import java.util.Random;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
- * Servlet implementation class RegisterServlet
+ * Servlet implementation class LoginServlet
  */
-@WebServlet("/RegisterServlet")
-public class RegisterServlet extends HttpServlet {
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RegisterServlet() {
+    public LoginServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,41 +31,31 @@ public class RegisterServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		response.setContentType("text/html;charset=UTF-8");
 		try {
-			String fname = request.getParameter("fname");
-			String lname = request.getParameter("lname");
+			//Datos recibidos desde login.jsp
 			String email = request.getParameter("email");
 			String pword = request.getParameter("pword");
+			
 			String newPword = DigestUtils.md5Hex(pword);
 			
-			//Generacion del codigo Hash para el link de verificación
-			String myHash;
-			Random random = new Random();
-			random.nextInt(999999);
-			myHash = DigestUtils.md5Hex(""+random);
+			LoginBean bean = new LoginBean();
+			bean.setPword(pword);
+			bean.setEmail(email);
+			bean.setNewPword(newPword);
 			
-			//Data Bean
-			RegisterBean rb = new RegisterBean();
-			rb.setFname(fname);
-			rb.setLname(lname);
-			rb.setEmail(email);
-			rb.setPword(newPword);
-			rb.setMyhash(myHash);
-			
-			//Creacion DAO File
-			RegisterDAO regDao = new RegisterDAO();
-			String str = regDao.RegisterUser(rb);
-			if (str.equals("SUCCESS")) {
-				response.sendRedirect("verify.jsp");
+			LoginDAO loginDAO = new LoginDAO();
+			String daoString = loginDAO.loginCheck(bean);
+			if (daoString.equals("success")){
+				HttpSession session = request.getSession(true);
+				session.setAttribute("session_user", email);
+				RequestDispatcher rd = request.getRequestDispatcher("welcome.jsp");
+				rd.forward(request, response);
 			} else {
-				response.sendRedirect("index.jsp");
+				response.sendRedirect("login.jsp");
 			}
 			
 		} catch(Exception ex) {
-			System.out.println("RegisterDAO File: "+ex);
+			System.out.println("Login Servlet: "+ex);
 		}
 	}
 

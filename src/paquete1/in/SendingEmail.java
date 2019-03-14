@@ -18,8 +18,8 @@ public class SendingEmail {
 		this.myHash = myHash;
 	}
 	public void sendMail() {
-		String email = "mariodaw2019@gmail.com";
-		String pword = "practicas";
+		String email = userEmail;
+		String pword = myHash;
 		Properties properties = new Properties();
 		
 		properties.put("mail.smtp.auth", "true");
